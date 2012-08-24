@@ -1,42 +1,86 @@
 ## Partializer
 
-Structure your partials!
+Structure your partials in Rails 3+
+
+## Installation
 
 ```ruby
-module Partializers
-  class Properties < Partializer
-    class Show < Partializer
-      def main
-        partials_for [{upper: :gallery}, :lower, :bar]
-      end
-
-      def side
-        partials_for [:basic_info, :cost, :more_info, :period, :similar_properties]
-      end
-
-      class Lower < Partializer
-        class Communication < Partializer
-          partialize :profile, :contact_requests, :social, :favorite, :priority_subscription, :free_subscription, :comments
-        end
-
-        partialize :_communication, :description        
-      end
-    end
-  end
-end
+# Gemfile
+gem 'partializer'
 ```
+
+Console, run:
+
+`$ bundle`
+
+## Requirements
+
+Only tested on Ruby 1.9.3 and Rails 3.2.
+
+## Why?
+
+In a Rails project I notices this reoccuring pattern and thought it would be nice to encapsulate it better ;)
 
 ```haml
 #communication.column
-  = render partial: p = partialize('properties#show', 'main.lower.communication'), locals: {p: p}
+  - [:profile, :contact_requests, :social, :favorite, :priority_subscription, :free_subscription, :comments].each do |name|
+  = render partial: "properties/show/communication/#{name}"
 ```
+
+Imagine you have a `properties/show/_main` partial. Then you can render all its subpartials like this:
 
 ```haml
 #communication.column
   = render_partials partialize('properties#show', 'main')
 ```
 
-Will render fx `properties/show/main/upper` and `properties/show/main/lower`.
+And for the `properties/show/main/_lower` partial, simply:
+
+```haml
+#main.column
+  = render_partials partialize(partializer, 'lower')
+```
+
+Since the partializer (with context) will be passed down as a local. Sleek :)
+
+## Configuration
+
+Note: This should be improved with even better DSL and perhaps loading from YAML file or similar? Maybe even supplying a hash directly and using Hashie::Mash?
+
+Structure your partial groupings like this:
+
+```ruby
+module Partializers
+  class Properties < Partializer
+    class Show < Partializer
+      partials_for :main, [{upper: :gallery}, :lower]
+        
+      partials_for :side, [:basic_info, :cost, :more_info, :period]
+
+      class Lower < Partializer
+        class Communication < Partializer
+          partialize :profile, :contact_requests, :social, :favorite, :priority_subscription, :free_subscription, :comments
+        end
+
+        partialize :_communication, :description
+      end
+
+      partials_for :my_main,  [{upper: :gallery}, :_lower]      
+    end
+  end
+end
+```
+
+Note: A Symbol prefixed with underscore will nest down the hierarchy, see fx `:_lower`vs `:lower`. In this case, the class must have been defined, since it uses a constant lookup on the class and instantiates it.
+
+Now you can use the Partializers in your views!
+
+```haml
+#communication.column
+  = render_partials partialize('properties#show', 'main')
+```
+
+This will render fx `properties/show/main/upper` and `properties/show/main/lower`.
 The partial called will have the partializer passed in as a local.
 
 This allows you to continue calling like this, which will effectively be a shorthand for calling: 
@@ -76,7 +120,6 @@ end
 And then invoking:
 
 `render :partial => @activities, :as => :activity`
-
 
 ## Contributing to partializer
  

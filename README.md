@@ -77,6 +77,46 @@ module Partializers
 end
 ```
 
+Alternatively using Classes and methods (sth like):
+
+```ruby
+module Partializers
+  class Properties < Partializer
+    class Show < Partializer
+      def main
+        partials_for :main, [{upper: :gallery}, :lower]
+      end
+        
+      def side
+        partials_for :side, [:basic_info, :cost, :more_info, :period]
+      end
+
+      class Lower < Partializer
+        class Communication < Partializer
+          def partials 
+            partials_for [
+              :profile, :contact_requests, :social, 
+              :favorite, :priority_subscription, 
+              :free_subscription, :comments
+            ]
+          end
+        end
+
+        def partials
+          partials_for [:_communication, :description]
+        end
+      end
+
+      def my_main
+        partials_for [{upper: :gallery}, :_lower]
+      end
+    end
+  end
+end
+```
+
+This will likely be optimized in the near future. No need for the `partials_for` method call in the instance methods. Can be auto-resolved when the Partializer resolves itself into a nested `Partializer::Collections` structure.
+
 ## Special Conventions
 
 A Symbol prefixed with underscore will nest down the hierarchy, see fx `:_lower`vs `:lower`. In this case, the class must have been defined, since it uses a constant lookup on the class and instantiates it.

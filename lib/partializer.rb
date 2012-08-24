@@ -11,6 +11,16 @@ require 'partializer/resolver'
 require 'partializer/view_helper'
 
 class Partializer
+
+  def partials_for name, *args
+    hash = args.flatten.inject({}) do |res, arg|
+      key = arg.kind_of?(Hash) ? arg.keys.first : arg
+      res[key.to_sym] = self.class.resolve(arg)
+      res
+    end
+    Partializer::Collection.new name, hash.keys, hash
+  end
+
   class << self
     def partialize *args, &block
       name = self.name.to_s.underscore
@@ -44,7 +54,7 @@ class Partializer
       clazz
     end
 
-    def partials_for name, *args      
+    def partials_for name, *args
       hash = args.flatten.inject({}) do |res, arg|
         key = arg.kind_of?(Hash) ? arg.keys.first : arg
         res[key.to_sym] = resolve(arg)

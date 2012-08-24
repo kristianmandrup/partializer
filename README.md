@@ -23,25 +23,48 @@ In a Rails project I notices this reoccuring pattern and thought it would be nic
 
 ```haml
 #communication.column
-  - [:profile, :contact_requests, :social, :favorite, :priority_subscription, :free_subscription, :comments].each do |name|
-  = render partial: "properties/show/communication/#{name}"
+  - [:upper :lower].each do |name|
+    = render partial: "properties/show/main/#{name}"
 ```
+
+```haml
+#lower.column
+  - [:communication :description].each do |name|
+    = render partial: "properties/show/main/lower/#{name}"
+```
+
+```haml
+#communication.column
+  - [:profile, :contact_requests, :social, :favorite, :comments].each do |name|
+    = render partial: "properties/show/main/lower/communication/#{name}"
+```
+
+Note also that all the partial paths are hardcoded here. If I move a folder, all the partials withing this folder have to be reconfigured to the new location! Argh!
+
+## With partialized partials :)
 
 Imagine you have a `properties/show/_main` partial. Then you can render all its subpartials like this:
 
 ```haml
-#communication.column
+#main.column
   = render_partials partialize('properties#show', 'main')
 ```
 
-And for the `properties/show/main/_lower` partial, simply:
+For the `properties/show/main/_lower` partial, simply:
 
 ```haml
-#main.column
+#lower.column
   = render_partials partialize(partializer, 'lower')
 ```
 
-Since the partializer (with context) will be passed down as a local. Sleek :)
+And for the `properties/show/main/lower/_communication` partial, simply:
+
+```haml
+#communication.column
+  = render_partials partialize(partializer, 'communication')
+```
+
+Since the partializer (with previous context) will be passed down as a local and used by `partialize` to resolve the context (partial path). Sleek :)
 
 ### The REAL power!
 

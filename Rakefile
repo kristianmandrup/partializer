@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "partializer"
   gem.homepage = "http://github.com/kristianmandrup/partializer"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Partialize your Rails partials for easy management and rendering}
+  gem.description = %Q{Makes it easy to render the subpartials of any partial}
   gem.email = "kmandrup@gmail.com"
   gem.authors = ["Kristian Mandrup"]
   # dependencies defined in Gemfile

@@ -27,6 +27,23 @@ class Partializer
       end
     end
 
+    def partializer name, options = {}, &block
+      default_parent = ::Partializer
+
+      parent = options[:parent] || default_parent
+      raise ArgumentError, "Parent must have a partialize method, was: #{parent}" unless parent.respond_to? :partialize
+
+      clazz_name = name.to_s.camelize
+      context = self.kind_of?(Class) ? self : self.class
+
+      clazz = parent ? Class.new(parent) : Class.new
+      context.const_set clazz_name, clazz          
+      clazz = context.const_get(clazz_name)
+
+      clazz.instance_eval(&block) if block_given?
+      clazz
+    end
+
     def partials_for name, *args      
       hash = args.flatten.inject({}) do |res, arg|
         key = arg.kind_of?(Hash) ? arg.keys.first : arg

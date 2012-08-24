@@ -5,8 +5,8 @@ module Partializers
         
       partials_for :side, [:basic_info, :cost, :more_info, :period, :similar_properties]
 
-      class Lower < Partializer
-        class Communication < Partializer
+      partializer :lower do
+        partializer :communication do
           partialize :profile, :contact_requests, :social, :favorite, :priority_subscription, :free_subscription, :comments
         end
 

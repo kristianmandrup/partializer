@@ -43,6 +43,12 @@ And for the `properties/show/main/_lower` partial, simply:
 
 Since the partializer (with context) will be passed down as a local. Sleek :)
 
+### The REAL power!
+
+Since the Partializer is class based, you can use simple inheritance and include to mixin partial configurations for other contexts, override, call `super` etc.
+
+Another great advantage is, that if you pass the "context" down the partial hierarchy, changing the top level context will take effect on all the partials in the call hierarchy. One change fix!
+
 ## Configuration
 
 Note: This should be improved with even better DSL and perhaps loading from YAML file or similar? Maybe even supplying a hash directly and using Hashie::Mash?
@@ -57,8 +63,8 @@ module Partializers
         
       partials_for :side, [:basic_info, :cost, :more_info, :period]
 
-      class Lower < Partializer
-        class Communication < Partializer
+      partializer :lower do
+        partializer :communication do
           partialize :profile, :contact_requests, :social, :favorite, :priority_subscription, :free_subscription, :comments
         end
 
@@ -71,7 +77,13 @@ module Partializers
 end
 ```
 
-Note: A Symbol prefixed with underscore will nest down the hierarchy, see fx `:_lower`vs `:lower`. In this case, the class must have been defined, since it uses a constant lookup on the class and instantiates it.
+## Special Conventions
+
+A Symbol prefixed with underscore will nest down the hierarchy, see fx `:_lower`vs `:lower`. In this case, the class must have been defined, since it uses a constant lookup on the class and instantiates it.
+
+It might make sense to drop this `_` convention and simply always attempt nested resolution?
+
+## Usage in Views and Partials
 
 Now you can use the Partializers in your views!
 
@@ -98,16 +110,7 @@ I'm taking advantage of this little hidden 'gem' in Rails :)
 
 [hidden-features-in-rails-3-2](http://blog.plataformatec.com.br/2012/01/my-five-favorite-hidden-features-in-rails-3-2/)
 
-Imagine your application have an activity feed and each activity in the feed has a certain type. Usually, each type is rendered differently. For example, if you consider a to-do-list application, activities could be both “marking a list as favorite” or “marking a task as done”. Usually, applications solve this by looping for each item and rendering its respective partial, something like this:
-
-```ruby
-@activities.each do |activity|
-  render :partial => "activities/#{activity.kind}",
-    :locals => { :activity =>  activity }
-end
-```
-
-Now, you can solve this problem by defining to_partial_path in the model (the method to_partial_path is part of the ActiveModel API and can be implemented in any object. The example above implements it in the model for convenience, but it could be a presenter, another ORM, etc):
+Now, you can solve this problem by defining `to_partial_path` (part of the ActiveModel API) and can be implemented in any object. 
 
 ```ruby
 class Activity

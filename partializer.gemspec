@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
     "lib/partializer/engine.rb",
     "lib/partializer/partial.rb",
     "lib/partializer/partials.rb",
-    "lib/partializer/path_helper.rb",
     "lib/partializer/resolver.rb",
     "lib/partializer/view_helper.rb",
     "partializer.gemspec",

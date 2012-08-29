@@ -10,8 +10,21 @@ class Partializer
 
       name = parts.first
       action = parts.last
-      clazz = "Partializers::#{name.to_s.camelize}".constantize
-      instance = clazz.new
+      try_clazzes = [name.to_s.camelize, "Partializers::#{name.to_s.camelize}"]
+
+      clazz = try_clazzes.select do |clazz|
+        begin
+          clazz.constantize
+        rescue NameError
+          nil
+        end
+      end.first
+
+      unless clazz
+        raise ArgumentError, "No Partializer could be found for: #{subject} in: #{try_clazzes}"
+      end
+      
+      instance = clazz.constantize.new
       instance = instance.send(action)
 
       path.split('.').each do |meth|

@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kristian Mandrup"]
-  s.date = "2012-08-24"
-  s.description = "TODO: longer description of your gem"
+  s.date = "2012-08-29"
+  s.description = "Makes it easy to render the subpartials of any partial"
   s.email = "kmandrup@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
     "lib/partializer/path_helper.rb",
     "lib/partializer/resolver.rb",
     "lib/partializer/view_helper.rb",
+    "partializer.gemspec",
     "spec/partializer/collection_spec.rb",
     "spec/partializer/partial_spec.rb",
     "spec/partializer/resolver_spec.rb",
@@ -44,7 +45,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
-  s.summary = "TODO: one-line summary of your gem"
+  s.summary = "Partialize your Rails partials for easy management and rendering"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3

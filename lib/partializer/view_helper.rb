@@ -34,7 +34,7 @@ class Partializer
       partials.list.inject("") do |res, partial|
         # res += "#{partial.view_path}:"
         opts = {:partial => subject}.merge(options)
-        res += raw(render opts )
+        res += raw(render opts)
       end
     end
   end

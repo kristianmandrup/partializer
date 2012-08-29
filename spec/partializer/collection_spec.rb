@@ -27,11 +27,11 @@ describe Partializer::Collection do
     end
 
     specify do
-      subject.partials.list.should include(:upper)
+      subject.partials.should include(:upper)
     end
 
     specify do
-      subject.upper.partials.list.should include(:gallery)
+      subject.upper.partials.should include(:gallery)
     end
   end
 end

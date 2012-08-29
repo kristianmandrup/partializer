@@ -3,14 +3,15 @@
 require 'rails'
 require 'hashie'
 
-require 'partializer/path_helper'
-require 'partializer/partials'
-require 'partializer/collection'
-require 'partializer/resolver'
-
 require 'partializer/view_helper'
+require 'partializer/engine' if defined?(::Rails::Engine)
 
 class Partializer
+  autoload :Collection,   'partializer/collection'
+  autoload :Resolver,     'partializer/resolver'
+  autoload :PathHelper,   'partializer/path_helper'
+  autoload :Partials,     'partializer/partials'
+
 
   def partials_for name, *args
     hash = args.flatten.inject({}) do |res, arg|

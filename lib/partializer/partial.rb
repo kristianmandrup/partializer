@@ -21,6 +21,10 @@ class Partializer
     def view_path
       [ns, action, path, name].compact.join('/')
     end
+    
+    def to_partial_path
+      view_path.gsub('.', '/')
+    end
 
     protected
 

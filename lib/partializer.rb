@@ -9,7 +9,6 @@ require 'partializer/engine' if defined?(::Rails::Engine)
 class Partializer
   autoload :Collection,   'partializer/collection'
   autoload :Resolver,     'partializer/resolver'
-  autoload :PathHelper,   'partializer/path_helper'
   autoload :Partials,     'partializer/partials'
 
 

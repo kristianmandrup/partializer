@@ -2,8 +2,6 @@ class Partializer
   class Collection
     include Enumerable
 
-    include Partializer::PathHelper
-
     attr_reader :hashie, :name, :ns, :action
 
     def initialize name, *items
@@ -25,6 +23,8 @@ class Partializer
     def path
       [ns, action, name.gsub('.', '/')].compact.join('/')
     end
+    alias_method :to_partial_path, :path
+
 
     def set_context ns, action
       @ns, @action = [ns, action]

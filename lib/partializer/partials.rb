@@ -3,9 +3,7 @@ require 'partializer/partial'
 class Partializer
   class Partials
     include Enumerable
-
-    include Partializer::PathHelper
-
+    
     attr_reader :name
 
     def initializer list
@@ -21,6 +19,10 @@ class Partializer
     end
 
     alias_method :path, :name
+    
+    def to_partial_path
+      path.gsub('.', '/')
+    end
 
     def list
       @list ||= []

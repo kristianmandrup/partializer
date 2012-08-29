@@ -11,6 +11,7 @@ describe Partializer::ViewHelper do
 
     its(:name) { should == 'main'}
     its(:path) { should == 'properties/show/main' }
+    its(:to_partial_path) { should == 'properties/show/main' }
 
     specify do
       subject.partials.should include(:upper, :lower)

@@ -35,7 +35,13 @@ class Partializer
     end
 
     def render_partials subject, options = {}
-      partials = subject.respond_to?(:partials) ? subject.partials : subject
+      partials = case subject
+      when Partializer::Collection
+        subject.partials
+      else
+        subject
+      end
+
       unless partials.kind_of? Partializer::Partials
         raise ArgumentError, "Must be a Partializer::Collection or Partializer::Partials, was: #{collection}"
       end
@@ -44,11 +50,12 @@ class Partializer
       locals_opts = {locals: {:partializer => subject}}.merge(options[:locals] || {})
       options.merge! locals_opts
 
+      # render options.merge(:partial => partials)
       partials.list.inject("") do |res, partial|
-        # res += "#{partial.view_path}:"
-        opts = {:partial => subject}.merge(options)
+        opts = {:partial => partial.to_partial_path}.merge(options)
         res += raw(render opts)
-      end
+        # res += "#{opts.inspect} ------- "
+      end.html_safe
     end
   end
 end

@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "partializer"
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kristian Mandrup"]
-  s.date = "2012-08-29"
+  s.date = "2012-08-30"
   s.description = "Makes it easy to render the subpartials of any partial"
   s.email = "kmandrup@gmail.com"
   s.extra_rdoc_files = [
@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "lib/partializer/engine.rb",
     "lib/partializer/partial.rb",
     "lib/partializer/partials.rb",
+    "lib/partializer/path_helper.rb",
     "lib/partializer/resolver.rb",
     "lib/partializer/view_helper.rb",
     "partializer.gemspec",

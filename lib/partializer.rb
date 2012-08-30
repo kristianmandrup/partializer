@@ -10,7 +10,9 @@ class Partializer
   autoload :Collection,   'partializer/collection'
   autoload :Resolver,     'partializer/resolver'
   autoload :Partials,     'partializer/partials'
+  autoload :PathHelper,   'partializer/path_helper'
 
+  class InvalidPartialError < StandardError; end
 
   def partials_for name, *args
     hash = args.flatten.inject({}) do |res, arg|

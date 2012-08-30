@@ -3,6 +3,7 @@ require 'partializer/partial'
 class Partializer
   class Partials
     include Enumerable
+    include Partializer::PathHelper
     
     attr_reader :name
 

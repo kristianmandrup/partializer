@@ -1,6 +1,17 @@
 class Partializer
   module ViewHelper
-    def partialize subject, path, &block
+    def partialize *args, &block
+      case args.size
+      when 2
+        subject = args.first
+        path = args.last
+      when 1
+        path = args.first
+        subject = partializer
+      else
+        raise ArgumentError, "partialize takes 1 or 2 args, was: #{args}"
+      end
+
       parts = case subject
       when String
         subject.split('#')

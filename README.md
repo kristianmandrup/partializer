@@ -61,10 +61,27 @@ And for the `properties/show/main/lower/_communication` partial, simply:
 
 ```haml
 #communication.column
-  = render_partials partialize(partializer, 'communication')
+  = render_partials partialize('communication')
 ```
 
 Since the partializer (with previous context) will be passed down as a local and used by `partialize` to resolve the context (partial path). Sleek :)
+Partialize will take advantage of this fact and use this local variable unless a specific Partializer is passed in as the first argument.
+
+*Context path building*
+
+Since the partializer has knowledge of the current context, you can use it to generate the path of a partial. The `#partial_path` method will raise an erorr if the name of the partial is not registered with that partializer.
+
+```haml
+#communication.column
+  = render partial: partializer.partial_path(:sidebar)
+```
+
+You can also use the partializer to build a relative path to its context (path)
+
+```haml
+#communication.column
+  = render partial: partializer.build_path('sidebar/upper')
+```
 
 ### The REAL power!
 

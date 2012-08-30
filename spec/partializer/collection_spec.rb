@@ -23,6 +23,10 @@ describe Partializer::Collection do
     end
 
     specify do
+      subject.partial_path(:sidebar).should == 'hash/sidebar'
+    end
+
+    specify do
       subject.partials.should be_a Partializer::Partials
     end
 

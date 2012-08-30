@@ -1,6 +1,7 @@
 class Partializer
   class Collection
     include Enumerable
+    include Partializer::PathHelper
 
     attr_reader :hashie, :name, :ns, :action
 
